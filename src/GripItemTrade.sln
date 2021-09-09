@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Api", "GripItemTrade.Api\GripItemTrade.Api.csproj", "{CE5597A5-2DDF-445F-9857-8211883F7385}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE5597A5-2DDF-445F-9857-8211883F7385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE5597A5-2DDF-445F-9857-8211883F7385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE5597A5-2DDF-445F-9857-8211883F7385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE5597A5-2DDF-445F-9857-8211883F7385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F46702DB-5BE1-4380-9AA6-517D756379F6}
+	EndGlobalSection
+EndGlobal
