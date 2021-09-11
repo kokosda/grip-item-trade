@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Api", "GripItemTrade.Api\GripItemTrade.Api.csproj", "{CE5597A5-2DDF-445F-9857-8211883F7385}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D59C0288-07F5-48EA-8661-57366819A62E}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DCFB9AFB-03F2-44B5-8A98-7D05EF53260B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Api", "GripItemTrade.Api\GripItemTrade.Api.csproj", "{5E40DB05-9B87-4320-B6F5-39519A0D22CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Infrastructure", "GripItemTrade.Infrastructure\GripItemTrade.Infrastructure.csproj", "{964DD12D-AB69-452B-AF95-94C3BD0CC58E}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AA45C1C4-BD78-44FB-AE26-2E9B946419DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GripItemTrade.Core", "GripItemTrade.Core\GripItemTrade.Core.csproj", "{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,17 +21,30 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CE5597A5-2DDF-445F-9857-8211883F7385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE5597A5-2DDF-445F-9857-8211883F7385}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE5597A5-2DDF-445F-9857-8211883F7385}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE5597A5-2DDF-445F-9857-8211883F7385}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE7BB2F6-4EA1-4402-A080-7A0BD63EAB37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E40DB05-9B87-4320-B6F5-39519A0D22CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E40DB05-9B87-4320-B6F5-39519A0D22CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E40DB05-9B87-4320-B6F5-39519A0D22CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E40DB05-9B87-4320-B6F5-39519A0D22CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{964DD12D-AB69-452B-AF95-94C3BD0CC58E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{964DD12D-AB69-452B-AF95-94C3BD0CC58E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{964DD12D-AB69-452B-AF95-94C3BD0CC58E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{964DD12D-AB69-452B-AF95-94C3BD0CC58E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA45C1C4-BD78-44FB-AE26-2E9B946419DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA45C1C4-BD78-44FB-AE26-2E9B946419DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA45C1C4-BD78-44FB-AE26-2E9B946419DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA45C1C4-BD78-44FB-AE26-2E9B946419DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E40DB05-9B87-4320-B6F5-39519A0D22CF} = {D59C0288-07F5-48EA-8661-57366819A62E}
+		{964DD12D-AB69-452B-AF95-94C3BD0CC58E} = {D59C0288-07F5-48EA-8661-57366819A62E}
+		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA} = {D59C0288-07F5-48EA-8661-57366819A62E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F46702DB-5BE1-4380-9AA6-517D756379F6}
