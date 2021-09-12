@@ -1,3 +1,4 @@
+using GripItemTrade.Application.DependencyInjection;
 using GripItemTrade.Infrastructure.DataAccess.Extensions;
 using GripItemTrade.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +28,7 @@ namespace GripItemTrade.Api
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "GripItemTrade.Api", Version = "v1" });
 			});
 			services.AddInfrastructureLevelServices(Configuration);
+			services.AddApplicationLevelServices();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,11 +43,8 @@ namespace GripItemTrade.Api
 			}
 
 			app.UseHttpsRedirection();
-
 			app.UseRouting();
-
 			app.UseAuthorization();
-
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
