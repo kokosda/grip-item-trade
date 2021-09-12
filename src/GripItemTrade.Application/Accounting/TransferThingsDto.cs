@@ -1,7 +1,9 @@
-﻿namespace GripItemTrade.Application.Accounting
+﻿using GripItemTrade.Application.TransactionOperations;
+
+namespace GripItemTrade.Application.Accounting
 {
 	public sealed class TransferThingsDto
 	{
-		public int TransactionOperationId { get; set; }
+		public TransactionOperationDto[] TransactionOperations { get; set; } = new TransactionOperationDto[0];
 	}
 }

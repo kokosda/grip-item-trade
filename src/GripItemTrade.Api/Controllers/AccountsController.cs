@@ -25,7 +25,7 @@ namespace GripItemTrade.Api.Controllers
 			if (!responseContainer.IsSuccess)
 				return UnprocessableEntity(responseContainer.Messages);
 
-			return Created(new Uri($"/transactionoperations/{responseContainer.Value.TransactionOperationId}", UriKind.Relative), null);
+			return new JsonResult(responseContainer.Value);
 		}
 	}
 }
