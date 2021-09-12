@@ -13,7 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Infrastructur
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AA45C1C4-BD78-44FB-AE26-2E9B946419DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GripItemTrade.Core", "GripItemTrade.Core\GripItemTrade.Core.csproj", "{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Core", "GripItemTrade.Core\GripItemTrade.Core.csproj", "{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GripItemTrade.Domain", "GripItemTrade.Domain\GripItemTrade.Domain.csproj", "{05BCA698-66F0-4E79-BFE7-3854AC78483C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GripItemTrade.Api.Tests", "..\tests\GripItemTrade.Api.Tests\GripItemTrade.Api.Tests.csproj", "{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GripItemTrade.Infrastructure.Tests", "..\tests\GripItemTrade.Infrastructure.Tests\GripItemTrade.Infrastructure.Tests.csproj", "{26904BEE-75A0-4C14-A5AB-88CA67C21D88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +43,18 @@ Global
 		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05BCA698-66F0-4E79-BFE7-3854AC78483C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05BCA698-66F0-4E79-BFE7-3854AC78483C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05BCA698-66F0-4E79-BFE7-3854AC78483C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05BCA698-66F0-4E79-BFE7-3854AC78483C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26904BEE-75A0-4C14-A5AB-88CA67C21D88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26904BEE-75A0-4C14-A5AB-88CA67C21D88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26904BEE-75A0-4C14-A5AB-88CA67C21D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26904BEE-75A0-4C14-A5AB-88CA67C21D88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +63,9 @@ Global
 		{5E40DB05-9B87-4320-B6F5-39519A0D22CF} = {D59C0288-07F5-48EA-8661-57366819A62E}
 		{964DD12D-AB69-452B-AF95-94C3BD0CC58E} = {D59C0288-07F5-48EA-8661-57366819A62E}
 		{7A4BCEC6-BD35-4030-8C28-CD3A1BF15BDA} = {D59C0288-07F5-48EA-8661-57366819A62E}
+		{05BCA698-66F0-4E79-BFE7-3854AC78483C} = {D59C0288-07F5-48EA-8661-57366819A62E}
+		{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A} = {DCFB9AFB-03F2-44B5-8A98-7D05EF53260B}
+		{26904BEE-75A0-4C14-A5AB-88CA67C21D88} = {DCFB9AFB-03F2-44B5-8A98-7D05EF53260B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F46702DB-5BE1-4380-9AA6-517D756379F6}
