@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using GripItemTrade.Core.Domain;
-using GripItemTrade.Domain.Balances;
+using GripItemTrade.Domain.Accounts;
 
 namespace GripItemTrade.Domain.Transactions
 {
@@ -9,6 +9,6 @@ namespace GripItemTrade.Domain.Transactions
 		public Account Account { get; set; }
 		public decimal Amount { get; set; }
 		public TransactionOperationType OperationType { get; set; }
-		public List<TransactionOperationEntry> Entries { get; set; }
+		public List<TransactionOperationEntry> Entries { get; set; } = new List<TransactionOperationEntry>();
 	}
 }

@@ -3,6 +3,7 @@ using GripItemTrade.Core.Interfaces;
 using GripItemTrade.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using GripItemTrade.Infrastructure.DataAccess.Interfaces;
 
 namespace GripItemTrade.Infrastructure.DependencyInjection
 {
@@ -12,12 +13,10 @@ namespace GripItemTrade.Infrastructure.DependencyInjection
 		{
 			var connectionString = configuration.GetConnectionString("GripItemTrade.SqlDb");
 
-			serviceCollection.AddDbContext<DataContext>(options =>
-			{
-				options.UseSqlServer(connectionString, a => a.MigrationsAssembly("GripItemTrade.Api"));
-			});
-
+			serviceCollection.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString, a => a.MigrationsAssembly("GripItemTrade.Api")));
+			serviceCollection.AddScoped<IDbInitializer, DbInitializer>();
 			serviceCollection.AddSingleton(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+
 			return serviceCollection;
 		}
 	}

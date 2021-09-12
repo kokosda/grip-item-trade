@@ -1,7 +1,7 @@
 ﻿using GripItemTrade.Core.Domain;
 using GripItemTrade.Domain.Customers;
 
-namespace GripItemTrade.Domain.Balances
+namespace GripItemTrade.Domain.Accounts
 {
 	public class BalanceEntry : EntityBase<int>
 	{

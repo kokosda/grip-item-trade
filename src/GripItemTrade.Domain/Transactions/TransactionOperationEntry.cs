@@ -1,5 +1,5 @@
 ﻿using GripItemTrade.Core.Domain;
-using GripItemTrade.Domain.Balances;
+using GripItemTrade.Domain.Accounts;
 
 namespace GripItemTrade.Domain.Transactions
 {

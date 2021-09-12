@@ -1,3 +1,4 @@
+using GripItemTrade.Infrastructure.DataAccess.Extensions;
 using GripItemTrade.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,7 @@ namespace GripItemTrade.Api
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GripItemTrade.Api v1"));
+				app.UseDatabaseInitializer();
 			}
 
 			app.UseHttpsRedirection();

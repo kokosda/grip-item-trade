@@ -1,4 +1,4 @@
-﻿using GripItemTrade.Domain.Balances;
+﻿using GripItemTrade.Domain.Accounts;
 using GripItemTrade.Domain.Customers;
 using GripItemTrade.Domain.Transactions;
 using Microsoft.EntityFrameworkCore;
