@@ -84,21 +84,21 @@ namespace GripItemTrade.Infrastructure.DataAccess
 					new BalanceEntry
 					{
 						Account = account,
-						Amount = (decimal)random.Next(0, 10),
+						Amount = (decimal)random.Next(20, 50),
 						Code = "BROOM",
 						Customer = account.Customer
 					},
 					new BalanceEntry
 					{
 						Account = account,
-						Amount = (decimal)random.Next(0, 10),
+						Amount = (decimal)random.Next(20, 50),
 						Code = "STICK",
 						Customer = account.Customer
 					},
 					new BalanceEntry
 					{
 						Account = account,
-						Amount = (decimal)random.Next(0, 10),
+						Amount = (decimal)random.Next(20, 50),
 						Code = "FLOWER",
 						Customer = account.Customer
 					}
