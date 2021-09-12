@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace VacationRental.Core.Interfaces
+namespace GripItemTrade.Core.Interfaces
 {
 	public interface ISqlConnectionFactory
 	{

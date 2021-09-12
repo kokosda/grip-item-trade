@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VacationRental.Core.Interfaces
+namespace GripItemTrade.Core.Interfaces
 {
 	public interface ILog
 	{

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using VacationRental.Core.Interfaces;
+using GripItemTrade.Core.Interfaces;
 
-namespace VacationRental.Core.Handlers
+namespace GripItemTrade.Core.Handlers
 {
     public interface IQueryHandler<in T>
     {

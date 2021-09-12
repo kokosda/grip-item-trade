@@ -1,8 +1,8 @@
-﻿using VacationRental.Core.Interfaces;
+﻿using GripItemTrade.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace VacationRental.Core.ResponseContainers
+namespace GripItemTrade.Core.ResponseContainers
 {
 	public class ResponseContainer : IResponseContainer
 	{

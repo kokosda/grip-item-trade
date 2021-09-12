@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace VacationRental.Core.Interfaces
+namespace GripItemTrade.Core.Interfaces
 {
 	public interface ICommonSpecification<in T>
 	{

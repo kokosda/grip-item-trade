@@ -1,6 +1,6 @@
-﻿using VacationRental.Core.Domain;
+﻿using GripItemTrade.Core.Domain;
 
-namespace VacationRental.Core.Interfaces
+namespace GripItemTrade.Core.Interfaces
 {
     public interface ISpecification<in T, TId> where T : EntityBase<TId>
     {

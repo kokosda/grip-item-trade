@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using VacationRental.Core.Domain;
+using GripItemTrade.Core.Domain;
 
-namespace VacationRental.Core.Interfaces
+namespace GripItemTrade.Core.Interfaces
 {
 	public interface IGenericRepository<T, in TId> where T: EntityBase<TId>
 	{

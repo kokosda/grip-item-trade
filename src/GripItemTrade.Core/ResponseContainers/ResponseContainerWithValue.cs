@@ -1,6 +1,6 @@
-﻿using VacationRental.Core.Interfaces;
+﻿using GripItemTrade.Core.Interfaces;
 
-namespace VacationRental.Core.ResponseContainers
+namespace GripItemTrade.Core.ResponseContainers
 {
 	public sealed class ResponseContainerWithValue<T> : ResponseContainer, IResponseContainerWithValue<T>
 	{

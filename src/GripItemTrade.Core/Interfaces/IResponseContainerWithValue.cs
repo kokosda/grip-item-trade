@@ -1,4 +1,4 @@
-﻿namespace VacationRental.Core.Interfaces
+﻿namespace GripItemTrade.Core.Interfaces
 {
 	public interface IResponseContainerWithValue<T> : IResponseContainer
 	{
