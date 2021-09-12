@@ -9,35 +9,33 @@ namespace GripItemTrade.Infrastructure.DataAccess
 	/// <summary>
 	/// Entity Framework generic repository.
 	/// </summary>
-	public class EfGenericRepository<T, TId> : IGenericRepository<T, TId> where T: EntityBase<TId>
+	public class EfGenericRepository: IGenericRepository
 	{
 		private readonly DbContext dbContext;
-		private readonly DbSet<T> dbSet;
 
 		public EfGenericRepository(DbContext dbContext)
 		{
 			this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-			dbSet = this.dbContext.Set<T>();
 		}
 		
-		public async Task<T> CreateAsync(T entity)
+		public async Task<T> CreateAsync<T, TId>(T entity) where T: EntityBase<TId>
 		{
 			if (entity == null)
 				throw new ArgumentNullException(nameof(entity));
 
-			await dbSet.AddAsync(entity);
+			await dbContext.AddAsync(entity);
 			await dbContext.SaveChangesAsync();
 			return entity;
 		}
 
 		/// <remarks>TODO: optimize for references' eager loading.</remarks>
-		public async Task<T> GetAsync(TId id)
+		public async Task<T> GetAsync<T, TId>(TId id) where T : EntityBase<TId>
 		{
-			var result = await dbSet.FindAsync(id);
+			var result = await dbContext.FindAsync<T>(id);
 			return result;
 		}
 
-		public async Task UpdateAsync(T entity)
+		public async Task UpdateAsync<T, TId>(T entity) where T : EntityBase<TId>
 		{
 			if (entity is null)
 				throw new ArgumentNullException(nameof(entity));
@@ -46,10 +44,10 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			await dbContext.SaveChangesAsync();
 		}
 
-		public async Task DeleteAsync(TId id)
+		public async Task DeleteAsync<T, TId>(TId id) where T : EntityBase<TId>
 		{
-			var entity = await GetAsync(id);
-			dbSet.Remove(entity);
+			var entity = await GetAsync<T, TId>(id);
+			dbContext.Remove(entity);
 		}
 	}
 }

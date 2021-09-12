@@ -15,7 +15,7 @@ namespace GripItemTrade.Infrastructure.DependencyInjection
 
 			serviceCollection.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString, a => a.MigrationsAssembly("GripItemTrade.Api")));
 			serviceCollection.AddScoped<IDbInitializer, DbInitializer>();
-			serviceCollection.AddScoped(typeof(IGenericRepository<,>), typeof(EfGenericRepository<,>));
+			serviceCollection.AddScoped<IGenericRepository, EfGenericRepository>();
 
 			return serviceCollection;
 		}

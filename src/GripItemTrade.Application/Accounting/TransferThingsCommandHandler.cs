@@ -10,19 +10,17 @@ namespace GripItemTrade.Application.Accounting
 {
 	public sealed class TransferThingsCommandHandler : GenericCommandHandlerBase<TransferThingsCommand, TransferThingsDto>
 	{
-		private readonly IGenericRepository<Account, int> accountRepository;
-		private readonly IGenericRepository<BalanceEntry, int> balanceEntryRepository;
+		private readonly IGenericRepository genericRepository;
 
-		public TransferThingsCommandHandler(IGenericRepository<Account, int> accountRepository, IGenericRepository<BalanceEntry, int> balanceEntryRepository)
+		public TransferThingsCommandHandler(IGenericRepository genericRepository)
 		{
-			this.accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
-			this.balanceEntryRepository = balanceEntryRepository ?? throw new ArgumentNullException(nameof(balanceEntryRepository));
+			this.genericRepository = genericRepository ?? throw new ArgumentNullException(nameof(genericRepository));
 		}
 
 		protected override async Task<IResponseContainerWithValue<TransferThingsDto>> GetResultAsync(TransferThingsCommand command)
 		{
 			var result = new ResponseContainerWithValue<TransferThingsDto>();
-			var sourceAccount = await accountRepository.GetAsync(command.SourceAccountId);
+			var sourceAccount = await genericRepository.GetAsync<Account, int>(command.SourceAccountId);
 
 			if (sourceAccount is null)
 			{
@@ -30,7 +28,7 @@ namespace GripItemTrade.Application.Accounting
 				return result;
 			}
 
-			var destinationAccount = await accountRepository.GetAsync(command.DestinationAccountId);
+			var destinationAccount = await genericRepository.GetAsync<Account, int>(command.DestinationAccountId);
 
 			if (destinationAccount is null)
 			{
@@ -42,7 +40,7 @@ namespace GripItemTrade.Application.Accounting
 
 			foreach (var balanceEntryDto in command.BalanceEntries)
 			{
-				var balanceEntry = await balanceEntryRepository.GetAsync(balanceEntryDto.BalanceEntryId);
+				var balanceEntry = await genericRepository.GetAsync<BalanceEntry, int>(balanceEntryDto.BalanceEntryId);
 				
 				if (balanceEntry is null)
 				{
