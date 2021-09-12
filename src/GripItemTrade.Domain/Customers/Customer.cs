@@ -1,6 +1,6 @@
 ﻿using GripItemTrade.Domain.Balances;
 using System.Collections.Generic;
-using VacationRental.Core.Domain;
+using GripItemTrade.Core.Domain;
 
 namespace GripItemTrade.Domain.Customers
 {
