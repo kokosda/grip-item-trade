@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GripItemTrade.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210912121810_InitialCreate")]
+    [Migration("20210912123057_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,7 @@ namespace GripItemTrade.Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -45,7 +45,7 @@ namespace GripItemTrade.Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountId")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
@@ -54,12 +54,14 @@ namespace GripItemTrade.Api.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("BalanceEntry");
                 });
@@ -92,13 +94,15 @@ namespace GripItemTrade.Api.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BalanceEntryId")
+                    b.Property<int?>("BalanceEntryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TransactionalOperationId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BalanceEntryId");
 
                     b.HasIndex("TransactionalOperationId");
 
@@ -112,7 +116,7 @@ namespace GripItemTrade.Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountId")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
@@ -123,32 +127,55 @@ namespace GripItemTrade.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId");
+
                     b.ToTable("TransactionalOperations");
                 });
 
             modelBuilder.Entity("GripItemTrade.Domain.Balances.Account", b =>
                 {
-                    b.HasOne("GripItemTrade.Domain.Customers.Customer", null)
+                    b.HasOne("GripItemTrade.Domain.Customers.Customer", "Customer")
                         .WithMany("Accounts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GripItemTrade.Domain.Balances.BalanceEntry", b =>
                 {
-                    b.HasOne("GripItemTrade.Domain.Balances.Account", null)
+                    b.HasOne("GripItemTrade.Domain.Balances.Account", "Account")
                         .WithMany("BalanceEntry")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("GripItemTrade.Domain.Customers.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GripItemTrade.Domain.Transactions.TransactionOperationEntry", b =>
                 {
+                    b.HasOne("GripItemTrade.Domain.Balances.BalanceEntry", "BalanceEntry")
+                        .WithMany()
+                        .HasForeignKey("BalanceEntryId");
+
                     b.HasOne("GripItemTrade.Domain.Transactions.TransactionalOperation", null)
                         .WithMany("Entries")
                         .HasForeignKey("TransactionalOperationId");
+
+                    b.Navigation("BalanceEntry");
+                });
+
+            modelBuilder.Entity("GripItemTrade.Domain.Transactions.TransactionalOperation", b =>
+                {
+                    b.HasOne("GripItemTrade.Domain.Balances.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("GripItemTrade.Domain.Balances.Account", b =>
