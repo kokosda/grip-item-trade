@@ -7,10 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["GripItemTrade.Api/GripItemTrade.Api.csproj", "GripItemTrade.Api/"]
-RUN dotnet restore "GripItemTrade.Api/GripItemTrade.Api.csproj"
+COPY ["src/GripItemTrade.Api/GripItemTrade.Api.csproj", "src/GripItemTrade.Api/"]
+COPY ["src/GripItemTrade.Core/GripItemTrade.Core.csproj", "src/GripItemTrade.Core/"]
+COPY ["src/GripItemTrade.Infrastructure/GripItemTrade.Infrastructure.csproj", "src/GripItemTrade.Infrastructure/"]
+COPY ["src/GripItemTrade.Domain/GripItemTrade.Domain.csproj", "src/GripItemTrade.Domain/"]
+COPY ["src/GripItemTrade.Application/GripItemTrade.Application.csproj", "src/GripItemTrade.Application/"]
+RUN dotnet restore "src/GripItemTrade.Api/GripItemTrade.Api.csproj"
 COPY . .
-WORKDIR "/src/GripItemTrade.Api"
+WORKDIR "/src/src/GripItemTrade.Api"
 RUN dotnet build "GripItemTrade.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish

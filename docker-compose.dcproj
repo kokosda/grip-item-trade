@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>aa45c1c4-bd78-44fb-ae26-2e9b946419dc</ProjectGuid>
+    <ProjectGuid>61586218-f2bd-4821-bcb9-bb68620cfe82</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>gripitemtrade.api</DockerServiceName>

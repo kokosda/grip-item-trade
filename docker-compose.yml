@@ -5,9 +5,7 @@ services:
     image: ${DOCKER_REGISTRY-}gripitemtradeapi
     build:
       context: .
-      dockerfile: GripItemTrade.Api/Dockerfile
-    depends_on:
-      - gripitemtrade.sqldb
+      dockerfile: src/GripItemTrade.Api/Dockerfile
   gripitemtrade.sqldb:
     image: "mcr.microsoft.com/mssql/server"
     ports:

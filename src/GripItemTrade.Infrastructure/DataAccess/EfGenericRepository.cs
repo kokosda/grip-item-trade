@@ -11,11 +11,11 @@ namespace GripItemTrade.Infrastructure.DataAccess
 	/// </summary>
 	public class EfGenericRepository: IGenericRepository
 	{
-		private readonly DbContext dbContext;
+		private readonly DataContext dbContext;
 
-		public EfGenericRepository(DbContext dbContext)
+		public EfGenericRepository(DataContext dataContext)
 		{
-			this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+			this.dbContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
 		}
 		
 		public async Task<T> CreateAsync<T, TId>(T entity) where T: EntityBase<TId>

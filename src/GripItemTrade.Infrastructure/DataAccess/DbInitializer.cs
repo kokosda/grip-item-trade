@@ -49,7 +49,6 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			};
 
 			SeedAccounts(dataContext, customers);
-
 			dataContext.Customers.AddRange(customers);
 
 		}
