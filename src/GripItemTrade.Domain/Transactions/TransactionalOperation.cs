@@ -6,9 +6,9 @@ namespace GripItemTrade.Domain.Transactions
 {
 	public class TransactionalOperation : EntityBase<int>
 	{
-		public Account Account { get; set; }
-		public decimal Amount { get; set; }
-		public TransactionOperationType OperationType { get; set; }
-		public List<TransactionOperationEntry> Entries { get; set; } = new List<TransactionOperationEntry>();
+		public Account Account { get; init; }
+		public decimal Amount { get; init; }
+		public TransactionOperationType OperationType { get; init; }
+		public List<TransactionOperationEntry> Entries { get; init; } = new List<TransactionOperationEntry>();
 	}
 }

@@ -25,6 +25,33 @@ namespace GripItemTrade.Application.Accounting
 		protected override async Task<IResponseContainerWithValue<TransferThingsDto>> GetResultAsync(TransferThingsCommand command)
 		{
 			var result = new ResponseContainerWithValue<TransferThingsDto>();
+			var validationResponseContainer = await ValidateCommandAsync(command);
+
+			result.JoinWith(validationResponseContainer);
+
+			if (!validationResponseContainer.IsSuccess)
+				return result;
+
+			var (sourceAccount, destinationAccount, transferItems) = validationResponseContainer.Value;
+			var transactionOperationResponseContainer = await accountService.TransferAsync(sourceAccount, destinationAccount, transferItems);
+			result.JoinWith(transactionOperationResponseContainer);
+			
+			if (transactionOperationResponseContainer.IsSuccess)
+			{
+				var value = new TransferThingsDto
+				{
+					TransactionOperations = transactionOperationResponseContainer.Value.Select(to => new TransactionOperationDto { TransactionOperationId = to.Id }).ToArray()
+				};
+
+				result.SetSuccessValue(value);
+			}
+
+			return result;
+		}
+
+		private async Task<IResponseContainerWithValue<Tuple<Account, Account, List<BalanceEntryTransferItem>>>> ValidateCommandAsync(TransferThingsCommand command)
+		{
+			var result = new ResponseContainerWithValue<Tuple<Account, Account, List<BalanceEntryTransferItem>>>();
 			var sourceAccount = await genericRepository.GetAsync<Account, int>(command.SourceAccountId);
 
 			if (sourceAccount is null)
@@ -41,33 +68,23 @@ namespace GripItemTrade.Application.Accounting
 				return result;
 			}
 
-			var balanceEntries = new List<BalanceEntry>();
+			var balanceEntries = new List<BalanceEntryTransferItem>();
 
 			foreach (var balanceEntryDto in command.BalanceEntries)
 			{
 				var balanceEntry = await genericRepository.GetAsync<BalanceEntry, int>(balanceEntryDto.BalanceEntryId);
-				
+
 				if (balanceEntry is null)
 				{
 					result.AddErrorMessage($"Balance entry is not found by ID {balanceEntryDto.BalanceEntryId}.");
 					return result;
 				}
 
-				balanceEntries.Add(balanceEntry);
+				balanceEntries.Add(new BalanceEntryTransferItem { BalanceEntry = balanceEntry, Amount = balanceEntryDto.Amount });
 			}
 
-			var transactionOperationResponseContainer = await accountService.TransferAsync(sourceAccount, destinationAccount, balanceEntries);
-			result.JoinWith(transactionOperationResponseContainer);
-			
-			if (transactionOperationResponseContainer.IsSuccess)
-			{
-				var value = new TransferThingsDto
-				{
-					TransactionOperations = transactionOperationResponseContainer.Value.Select(to => new TransactionOperationDto { TransactionOperationId = to.Id }).ToArray()
-				};
-
-				result.SetSuccessValue(value);
-			}
+			if (result.IsSuccess)
+				result.SetSuccessValue(Tuple.Create(sourceAccount, destinationAccount, balanceEntries));
 
 			return result;
 		}

@@ -7,6 +7,6 @@ namespace GripItemTrade.Domain.Accounts.Interfaces
 {
 	public interface IAccountService
 	{
-		Task<IResponseContainerWithValue<IReadOnlyList<TransactionalOperation>>> TransferAsync(Account sourceAccount, Account destinationAccount, ICollection<BalanceEntry> balanceEntries);
+		Task<IResponseContainerWithValue<IReadOnlyList<TransactionalOperation>>> TransferAsync(Account sourceAccount, Account destinationAccount, ICollection<BalanceEntryTransferItem> transferItems);
 	}
 }
