@@ -10,13 +10,13 @@ namespace GripItemTrade.Domain.Accounts
 {
 	public class Account : EntityBase<int>
 	{
-		public Customer Customer { get; init; }
-		public List<BalanceEntry> BalanceEntries { get; init; } = new List<BalanceEntry>();
+		private readonly List<BalanceEntry> balanceEntries = new List<BalanceEntry>();
 
-		public decimal GetTotalAmount()
-		{
-			var result = BalanceEntries.Sum(be => be.Amount);
-			return result;
+		public Customer Customer { get; init; }
+		public IReadOnlyList<BalanceEntry> BalanceEntries 
+		{ 
+			get => balanceEntries;
+			init => balanceEntries = value is not null ? value.ToList() : throw new ArgumentNullException(nameof(balanceEntries)); 
 		}
 
 		public IResponseContainer ChargeBalanceEntry(string balanceEntryCode, decimal amount)
@@ -25,7 +25,7 @@ namespace GripItemTrade.Domain.Accounts
 				throw new ArgumentException($"'{nameof(balanceEntryCode)}' cannot be null or whitespace.", nameof(balanceEntryCode));
 
 			var result = new ResponseContainer();
-			var balanceEntry = BalanceEntries.FirstOrDefault(be => be.Code == balanceEntryCode);
+			var balanceEntry = balanceEntries.FirstOrDefault(be => be.Code == balanceEntryCode);
 
 			if (balanceEntry is null)
 				result.AddErrorMessage($"Balance entry with code {balanceEntryCode} can not be found.");
@@ -45,10 +45,7 @@ namespace GripItemTrade.Domain.Accounts
 			var ownBalanceEntry = BalanceEntries.Where(be => be.Code == balanceEntryCode).FirstOrDefault();
 
 			if (ownBalanceEntry is null)
-			{
 				ownBalanceEntry = BalanceEntry.Create(this, balanceEntryCode, amount);
-				BalanceEntries.Add(ownBalanceEntry);
-			}
 			else
 			{
 				var depositResponseContainer = ownBalanceEntry.Deposit(amount);
@@ -59,6 +56,16 @@ namespace GripItemTrade.Domain.Accounts
 				result.SetSuccessValue(ownBalanceEntry);
 
 			return result;
+		}
+
+		internal void AppendBalanceEntry(BalanceEntry balanceEntry)
+		{
+			if (balanceEntry is null)
+				throw new ArgumentNullException(nameof(balanceEntry));
+			if (Id != balanceEntry.Account.Id)
+				throw new InvalidOperationException($"Can not reassign balance entry {balanceEntry.Id} to account {Id} it does not belong to.");
+
+			balanceEntries.Add(balanceEntry);
 		}
 	}
 }

@@ -47,22 +47,24 @@ namespace GripItemTrade.Domain.Accounts
 			return result;
 		}
 
-		public static BalanceEntry Create(Account accout, string code, decimal amount)
+		public static BalanceEntry Create(Account account, string code, decimal amount)
 		{
-			if (accout is null)
-				throw new ArgumentNullException(nameof(accout));
-			if (accout.Customer is null)
-				throw new InvalidOperationException($"Account must have customer property assigned. {accout.Id}");
+			if (account is null)
+				throw new ArgumentNullException(nameof(account));
+			if (account.Customer is null)
+				throw new InvalidOperationException($"Account must have customer property assigned. {account.Id}");
 			if (string.IsNullOrWhiteSpace(code))
 				throw new ArgumentException($"'{nameof(code)}' cannot be null or whitespace.", nameof(code));
 
 			var result = new BalanceEntry
 			{
-				Account = accout,
-				Customer = accout.Customer,
+				Account = account,
+				Customer = account.Customer,
 				Amount = amount,
 				Code = code
 			};
+
+			account.AppendBalanceEntry(result);
 
 			return result;
 		}
