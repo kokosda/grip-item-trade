@@ -13,15 +13,15 @@ namespace GripItemTrade.Domain.Accounts.Specifications
 			this.amount = amount;
 		}
 
-		public IResponseContainer IsSatisfiedBy(BalanceEntry entity)
+		public IResponseContainer IsSatisfiedBy(BalanceEntry balanceEntry)
 		{
-			if (entity is null)
-				throw new ArgumentNullException(nameof(entity));
+			if (balanceEntry is null)
+				throw new ArgumentNullException(nameof(balanceEntry));
 
 			var result = new ResponseContainer();
 
 			if (amount < 0M)
-				result.AddErrorMessage($"Amount can not be negative. Amount passed is {amount}.");
+				result.AddErrorMessage($"Amount can not be negative. Amount passed is {amount}. Balance entry ID {balanceEntry.Id}.");
 
 			return result;
 		}
