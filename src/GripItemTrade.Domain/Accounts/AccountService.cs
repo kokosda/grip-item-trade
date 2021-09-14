@@ -56,7 +56,7 @@ namespace GripItemTrade.Domain.Accounts
 
 				var depositResponseContainer = destinationAccount.DepositBalanceEntry(transferItem.BalanceEntry.Code, transferItem.Amount);
 
-				if (depositResponseContainer.IsSuccess)
+				if (!depositResponseContainer.IsSuccess)
 				{
 					result.JoinWith(depositResponseContainer);
 					return result;
