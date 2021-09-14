@@ -48,10 +48,15 @@ namespace GripItemTrade.Application.Accounting
 				var debitTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(sourceAccount, TransactionalOperationType.Debit, balanceTransferResult.ChargedItems);
 				var creditTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(destinationAccount, TransactionalOperationType.Credit, balanceTransferResult.DepositedItems);
 
-				await unitOfWork.CommitAsync();
+				result.JoinWith(debitTransactionalOperation).JoinWith(creditTransactionalOperation);
 
-				var transferThingsDto = new [] { debitTransactionalOperation.Value, creditTransactionalOperation.Value }.ToTransferThingsDto();
-				result.SetSuccessValue(transferThingsDto);
+				if (result.IsSuccess)
+				{
+					await unitOfWork.CommitAsync();
+
+					var transferThingsDto = new [] { debitTransactionalOperation.Value, creditTransactionalOperation.Value }.ToTransferThingsDto();
+					result.SetSuccessValue(transferThingsDto);
+				}
 			}
 
 			return result;
