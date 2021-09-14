@@ -24,7 +24,6 @@ namespace GripItemTrade.Infrastructure.DataAccess
 				throw new ArgumentNullException(nameof(entity));
 
 			await dbContext.AddAsync(entity);
-			await dbContext.SaveChangesAsync();
 			return entity;
 		}
 
@@ -35,19 +34,24 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			return result;
 		}
 
-		public async Task UpdateAsync<T, TId>(T entity) where T : EntityBase<TId>
+		public Task UpdateAsync<T, TId>(T entity) where T : EntityBase<TId>
 		{
 			if (entity is null)
 				throw new ArgumentNullException(nameof(entity));
 
 			dbContext.Entry(entity).State = EntityState.Modified;
-			await dbContext.SaveChangesAsync();
+			return Task.CompletedTask;
 		}
 
 		public async Task DeleteAsync<T, TId>(TId id) where T : EntityBase<TId>
 		{
 			var entity = await GetAsync<T, TId>(id);
 			dbContext.Remove(entity);
+		}
+
+		public async Task ApplyChangesAsync()
+		{
+			await dbContext.SaveChangesAsync();
 		}
 	}
 }

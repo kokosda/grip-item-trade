@@ -4,6 +4,10 @@ using GripItemTrade.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using GripItemTrade.Infrastructure.DataAccess.Interfaces;
+using GripItemTrade.Domain.Accounts;
+using GripItemTrade.Domain.Accounts.Interfaces;
+using GripItemTrade.Domain.Transactions.Interfaces;
+using GripItemTrade.Domain.Transactions;
 
 namespace GripItemTrade.Infrastructure.DependencyInjection
 {
@@ -16,8 +20,17 @@ namespace GripItemTrade.Infrastructure.DependencyInjection
 			serviceCollection.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString, a => a.MigrationsAssembly("GripItemTrade.Api")));
 			serviceCollection.AddScoped<IDbInitializer, DbInitializer>();
 			serviceCollection.AddScoped<IGenericRepository, EfGenericRepository>();
+			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
+
+			serviceCollection.AddDomainLevelServices();
 
 			return serviceCollection;
+		}
+
+		private static void AddDomainLevelServices(this IServiceCollection serviceCollection)
+		{
+			serviceCollection.AddScoped<IAccountService, AccountService>();
+			serviceCollection.AddScoped<ITransactionalOperationService, TransactionalOperationService>();
 		}
 	}
 }
