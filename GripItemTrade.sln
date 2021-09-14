@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GripItemTrade.Application",
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{61586218-F2BD-4821-BCB9-BB68620CFE82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GripItemTrade.Domain.Tests", "..\tests\GripItemTrade.Domain.Tests\GripItemTrade.Domain.Tests.csproj", "{5CF8AA1E-50A4-4363-84DE-750B6DA40CAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{61586218-F2BD-4821-BCB9-BB68620CFE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61586218-F2BD-4821-BCB9-BB68620CFE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61586218-F2BD-4821-BCB9-BB68620CFE82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CF8AA1E-50A4-4363-84DE-750B6DA40CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF8AA1E-50A4-4363-84DE-750B6DA40CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF8AA1E-50A4-4363-84DE-750B6DA40CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF8AA1E-50A4-4363-84DE-750B6DA40CAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{467FF8D5-1AD8-44F5-97CE-1705E7AFE29A} = {DCFB9AFB-03F2-44B5-8A98-7D05EF53260B}
 		{26904BEE-75A0-4C14-A5AB-88CA67C21D88} = {DCFB9AFB-03F2-44B5-8A98-7D05EF53260B}
 		{CF138EA8-5AAE-433F-A68D-D14ACDAE9DF9} = {D59C0288-07F5-48EA-8661-57366819A62E}
+		{5CF8AA1E-50A4-4363-84DE-750B6DA40CAF} = {DCFB9AFB-03F2-44B5-8A98-7D05EF53260B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F46702DB-5BE1-4380-9AA6-517D756379F6}

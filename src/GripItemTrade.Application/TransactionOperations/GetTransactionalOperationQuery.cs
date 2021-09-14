@@ -2,9 +2,9 @@
 
 namespace GripItemTrade.Application.TransactionOperations
 {
-	public sealed class GetTransactionOperationQuery
+	public sealed record GetTransactionalOperationQuery
 	{
 		[Range(1, int.MaxValue)]
-		public int TransactionOperationId { get; set; }
+		public int TransactionOperationId { get; init; }
 	}
 }

@@ -12,7 +12,7 @@ namespace GripItemTrade.Application.DependencyInjection
 		public static IServiceCollection AddApplicationLevelServices(this IServiceCollection serviceCollection)
 		{
 			serviceCollection.AddScoped<IGenericCommandHandler<TransferThingsCommand, TransferThingsDto>, TransferThingsCommandHandler>();
-			serviceCollection.AddScoped<IGenericQueryHandler<GetTransactionOperationQuery, TransactionOperationDto>, TransactionOperationsQueryHandler>();
+			serviceCollection.AddScoped<IGenericQueryHandler<GetTransactionalOperationQuery, TransactionalOperationDto>, TransactionalOperationsQueryHandler>();
 			serviceCollection.AddScoped<IAccountService, AccountService>();
 			return serviceCollection;
 		}
