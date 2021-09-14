@@ -1,7 +1,6 @@
 ﻿using GripItemTrade.Core.Interfaces;
 using GripItemTrade.Core.ResponseContainers;
 using GripItemTrade.Domain.Accounts.Interfaces;
-using GripItemTrade.Domain.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +17,7 @@ namespace GripItemTrade.Domain.Accounts
 			this.genericRepository = genericRepository ?? throw new ArgumentNullException(nameof(genericRepository));
 		}
 
-		/// <summary>
-		/// TODO: implement logic of account withdrawal and population. Don't forget about optimistic concurrency.
-		/// </summary>
-		public async Task<IResponseContainerWithValue<IReadOnlyList<TransactionalOperation>>> TransferAsync(Account sourceAccount, Account destinationAccount, ICollection<BalanceEntryTransferItem> transferItems)
+		public async Task<IResponseContainerWithValue<BalanceEntryTransferResult>> TransferAsync(Account sourceAccount, Account destinationAccount, ICollection<BalanceEntryTransferItem> transferItems)
 		{
 			if (sourceAccount is null)
 				throw new ArgumentNullException(nameof(sourceAccount));
@@ -30,28 +26,21 @@ namespace GripItemTrade.Domain.Accounts
 			if (transferItems is null || transferItems.Count == 0)
 				throw new ArgumentNullException(nameof(transferItems));
 
-			var result = new ResponseContainerWithValue<IReadOnlyList<TransactionalOperation>>();
+			var result = new ResponseContainerWithValue<BalanceEntryTransferResult>();
 			var validationResponseContainer = Validate(sourceAccount, destinationAccount, transferItems);
 
 			result.JoinWith(validationResponseContainer);
+
 			if (!result.IsSuccess)
 				return result;
 
-			var amount = 0M;
-			var debitTransactionOperationEntries = new List<TransactionOperationEntry>();
-			var creditTrannsactionOperationEntries = new List<TransactionOperationEntry>();
+			var transferAmount = 0M;
+			var chargedItems = new List<BalanceEntryTransferItem>();
+			var depositedItems = new List<BalanceEntryTransferItem>();
 
 			foreach (var transferItem in transferItems)
 			{
-				amount += transferItem.Amount;
-
-				var debitEntry = new TransactionOperationEntry
-				{
-					Amount = transferItem.Amount,
-					BalanceEntry = transferItem.BalanceEntry
-				};
-
-				debitTransactionOperationEntries.Add(debitEntry);
+				transferAmount += transferItem.Amount;
 
 				var chargeResponseContainer = sourceAccount.ChargeBalanceEntry(transferItem.BalanceEntry.Code, transferItem.Amount);
 
@@ -61,6 +50,10 @@ namespace GripItemTrade.Domain.Accounts
 					return result;
 				}
 
+				await genericRepository.UpdateAsync<BalanceEntry, int>(transferItem.BalanceEntry);
+
+				chargedItems.Add(transferItem);
+
 				var depositResponseContainer = destinationAccount.DepositBalanceEntry(transferItem.BalanceEntry.Code, transferItem.Amount);
 
 				if (depositResponseContainer.IsSuccess)
@@ -69,34 +62,24 @@ namespace GripItemTrade.Domain.Accounts
 					return result;
 				}
 
-				var creditEntry = new TransactionOperationEntry
-				{
-					Amount = transferItem.Amount,
-					BalanceEntry = depositResponseContainer.Value
-				};
+				var depositedBalanceEntry = depositResponseContainer.Value;
 
-				creditTrannsactionOperationEntries.Add(creditEntry);
+				if (depositedBalanceEntry.Id == 0)
+					await genericRepository.CreateAsync<BalanceEntry, int>(depositResponseContainer.Value);
+				else
+					await genericRepository.UpdateAsync<BalanceEntry, int>(depositedBalanceEntry);
+
+				depositedItems.Add(new BalanceEntryTransferItem { BalanceEntry = depositResponseContainer.Value, Amount = transferItem.Amount });
 			}
 
-			var debitTransactionOperation = new TransactionalOperation
+			var balanceEntryTransferResult = new BalanceEntryTransferResult
 			{
-				Account = sourceAccount,
-				OperationType = TransactionOperationType.Debit,
-				Amount = amount,
-				Entries = debitTransactionOperationEntries
+				ChargedItems = chargedItems,
+				DepositedItems = depositedItems
 			};
 
-			var creditTransactionOperation = new TransactionalOperation
-			{
-				Account = destinationAccount,
-				Amount = debitTransactionOperation.Amount,
-				OperationType = TransactionOperationType.Credit,
-			};
+			result.SetSuccessValue(balanceEntryTransferResult);
 
-			await genericRepository.CreateAsync<TransactionalOperation, int>(debitTransactionOperation);
-			await genericRepository.CreateAsync<TransactionalOperation, int>(creditTransactionOperation);
-
-			result.SetSuccessValue(new List<TransactionalOperation> { debitTransactionOperation, creditTransactionOperation });
 			return result;
 		}
 
