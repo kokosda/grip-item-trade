@@ -34,29 +34,29 @@ namespace GripItemTrade.Application.Accounting
 			var validationResponseContainer = await ValidateCommandAsync(command);
 			result.JoinWith(validationResponseContainer);
 
-			if (!validationResponseContainer.IsSuccess)
+			if (!result.IsSuccess)
 				return result;
 
 			var (sourceAccount, destinationAccount, transferItems) = validationResponseContainer.Value;
 			var transferResponseContainer = await accountService.TransferAsync(sourceAccount, destinationAccount, transferItems);
 
 			result.JoinWith(transferResponseContainer);
-			
-			if (transferResponseContainer.IsSuccess)
+
+			if (!result.IsSuccess)
+				return result;
+
+			var balanceTransferResult = transferResponseContainer.Value;
+			var debitTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(sourceAccount, TransactionalOperationType.Debit, balanceTransferResult.ChargedItems);
+			var creditTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(destinationAccount, TransactionalOperationType.Credit, balanceTransferResult.DepositedItems);
+
+			result.JoinWith(debitTransactionalOperation).JoinWith(creditTransactionalOperation);
+
+			if (result.IsSuccess)
 			{
-				var balanceTransferResult = transferResponseContainer.Value;
-				var debitTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(sourceAccount, TransactionalOperationType.Debit, balanceTransferResult.ChargedItems);
-				var creditTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(destinationAccount, TransactionalOperationType.Credit, balanceTransferResult.DepositedItems);
+				await unitOfWork.CommitAsync();
 
-				result.JoinWith(debitTransactionalOperation).JoinWith(creditTransactionalOperation);
-
-				if (result.IsSuccess)
-				{
-					await unitOfWork.CommitAsync();
-
-					var transferThingsDto = new [] { debitTransactionalOperation.Value, creditTransactionalOperation.Value }.ToTransferThingsDto();
-					result.SetSuccessValue(transferThingsDto);
-				}
+				var transferThingsDto = new [] { debitTransactionalOperation.Value, creditTransactionalOperation.Value }.ToTransferThingsDto();
+				result.SetSuccessValue(transferThingsDto);
 			}
 
 			return result;
