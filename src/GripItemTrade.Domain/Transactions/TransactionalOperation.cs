@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GripItemTrade.Core.Domain;
+using GripItemTrade.Core.Interfaces;
+using GripItemTrade.Core.ResponseContainers;
 using GripItemTrade.Domain.Accounts;
 
 namespace GripItemTrade.Domain.Transactions
@@ -8,7 +11,46 @@ namespace GripItemTrade.Domain.Transactions
 	{
 		public Account Account { get; init; }
 		public decimal Amount { get; init; }
-		public TransactionOperationType OperationType { get; init; }
-		public List<TransactionOperationEntry> Entries { get; init; } = new List<TransactionOperationEntry>();
+		public TransactionalOperationType OperationType { get; init; }
+		public List<TransactionalOperationEntry> Entries { get; init; } = new List<TransactionalOperationEntry>();
+
+		public static IResponseContainerWithValue<TransactionalOperation> Create(Account account, TransactionalOperationType operationType,	 ICollection<BalanceEntryTransferItem> transferItems)
+		{
+			if (account is null)
+				throw new ArgumentNullException(nameof(account));
+			if (transferItems is null)
+				throw new ArgumentNullException(nameof(transferItems));
+
+			var result = new ResponseContainerWithValue<TransactionalOperation>();
+
+			if (transferItems.Count == 0)
+			{
+				result.AddErrorMessage($"{nameof(transferItems)} collection is required to contain elements.");
+				return result;
+			}
+
+			var transferAmount = 0M;
+			var operationEntries = new List<TransactionalOperationEntry>();
+
+			foreach (var transferItem in transferItems)
+			{
+				transferAmount += transferItem.Amount;
+
+				var operationEntry = TransactionalOperationEntry.Create(transferItem.BalanceEntry, transferItem.Amount);
+
+				operationEntries.Add(operationEntry);
+			}
+
+			var transactionalOperation = new TransactionalOperation
+			{
+				Account = account,
+				OperationType = operationType,
+				Amount = transferAmount,
+				Entries = operationEntries
+			};
+
+			result.SetSuccessValue(transactionalOperation);
+			return result;
+		}
 	}
 }
