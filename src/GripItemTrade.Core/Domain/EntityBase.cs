@@ -2,6 +2,6 @@
 {
 	public abstract class EntityBase<TId>
 	{
-		public TId Id { get; set; }
+		public TId Id { get; init; }
 	}
 }
