@@ -79,30 +79,8 @@ namespace GripItemTrade.Infrastructure.DataAccess
 
 			foreach (var account in accounts)
 			{
-				account.BalanceEntries.AddRange(new[]
-				{
-					new BalanceEntry
-					{
-						Account = account,
-						Amount = (decimal)random.Next(20, 50),
-						Code = "BROOM",
-						Customer = account.Customer
-					},
-					new BalanceEntry
-					{
-						Account = account,
-						Amount = (decimal)random.Next(20, 50),
-						Code = "STICK",
-						Customer = account.Customer
-					},
-					new BalanceEntry
-					{
-						Account = account,
-						Amount = (decimal)random.Next(20, 50),
-						Code = "FLOWER",
-						Customer = account.Customer
-					}
-				});
+				foreach(var code in new [] { "BROOM", "STICK", "FLOWER" })
+					BalanceEntry.Create(account, code, amount: random.Next(20, 50));
 			}
 		}
 	}
