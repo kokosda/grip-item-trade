@@ -1,19 +1,32 @@
 ﻿using GripItemTrade.Application.Handlers;
+using GripItemTrade.Application.TransactionOperations.Extensions;
 using GripItemTrade.Core.Interfaces;
-using System;
+using GripItemTrade.Core.ResponseContainers;
+using GripItemTrade.Domain.Transactions.Interfaces;
 using System.Threading.Tasks;
 
 namespace GripItemTrade.Application.TransactionOperations
 {
 	public sealed class TransactionalOperationsQueryHandler : GenericQueryHandlerBase<GetTransactionalOperationQuery, TransactionalOperationDto>
 	{
-		public TransactionalOperationsQueryHandler()
+		private readonly ITransactionalOperationRepository transactionalOperationRepository;
+
+		public TransactionalOperationsQueryHandler(ITransactionalOperationRepository transactionalOperationRepository)
 		{
+			this.transactionalOperationRepository = transactionalOperationRepository;
 		}
 
-		protected override Task<IResponseContainerWithValue<TransactionalOperationDto>> GetResultAsync(GetTransactionalOperationQuery query)
+		protected override async Task<IResponseContainerWithValue<TransactionalOperationDto>> GetResultAsync(GetTransactionalOperationQuery query)
 		{
-			throw new NotImplementedException();
+			var result = new ResponseContainerWithValue<TransactionalOperationDto>();
+			var transactionalOperation = await transactionalOperationRepository.GetByIdAsync(query.TransactionalOperationId);
+
+			if (transactionalOperation is null)
+				result.AddErrorMessage($"Transactional operation not found by ID {query.TransactionalOperationId}.");
+
+			var transactionalOperationDto = transactionalOperation.ToTransactionalOperationDto();
+			result.SetSuccessValue(transactionalOperationDto);
+			return result;
 		}
 	}
 }

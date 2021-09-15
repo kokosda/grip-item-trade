@@ -14,9 +14,11 @@ namespace GripItemTrade.Application.TransactionOperations.Extensions
 			var result = new TransactionalOperationDto
 			{
 				TransactionalOperationId = transactionalOperation.Id,
+				AccountId = transactionalOperation.Account.Id,
 				Amount = transactionalOperation.Amount,
 				OperationType = transactionalOperation.OperationType.ToString(),
-				Entries = transactionalOperation.Entries.Select(toe => toe.ToTransactionalOperationEntryDto()).ToArray()
+				Entries = transactionalOperation.Entries.Select(toe => toe.ToTransactionalOperationEntryDto()).ToArray(),
+				DependentOperations = transactionalOperation.DependentOperations?.Select(ToTransactionalOperationDto).ToArray()
 			};
 
 			return result;

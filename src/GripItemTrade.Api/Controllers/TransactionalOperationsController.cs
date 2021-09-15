@@ -13,16 +13,17 @@ namespace GripItemTrade.Api.Controllers
 
 		public TransactionalOperationsController(IGenericQueryHandler<GetTransactionalOperationQuery, TransactionalOperationDto> transactionalOperationQueryHandler)
 		{
-			this.transactionalOperationQueryHandler = transactionalOperationQueryHandler;
+			this.transactionalOperationQueryHandler = transactionalOperationQueryHandler ?? throw new System.ArgumentNullException(nameof(transactionalOperationQueryHandler));
 		}
 
 		[HttpGet]
-		public async Task<ActionResult> Get(GetTransactionalOperationQuery model)
+		[Route("{transactionalOperationId:int}")]
+		public async Task<ActionResult> Get([FromRoute] GetTransactionalOperationQuery model)
 		{
 			var responseContainer = await transactionalOperationQueryHandler.HandleAsync(model);
 
 			if (!responseContainer.IsSuccess)
-				return UnprocessableEntity(responseContainer.Messages);
+				return NotFound(responseContainer.Messages);
 
 			return new JsonResult(responseContainer.Value);
 		} 
