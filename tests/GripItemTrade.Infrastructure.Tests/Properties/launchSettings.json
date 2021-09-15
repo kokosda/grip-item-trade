@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GripItemTrade.Infrastructure.Tests": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -6,8 +6,6 @@ services:
     build:
       context: .
       dockerfile: src/GripItemTrade.Api/Dockerfile
-    depends_on: 
-      - gripitemtrade.sqldb
   gripitemtrade.sqldb:
     image: "mcr.microsoft.com/mssql/server"
     ports:
@@ -15,3 +13,11 @@ services:
     environment:
       SA_PASSWORD: "AzureKeyVaultPassword!"
       ACCEPT_EULA: "Y"
+  gripitemtrade.infrastructure.tests:
+    image: ${DOCKER_REGISTRY-}gripitemtradeinfrastructuretests
+    depends_on: 
+      - gripitemtrade.sqldb
+    build:
+      context: .
+      dockerfile: tests/GripItemTrade.Infrastructure.Tests/Dockerfile
+    
