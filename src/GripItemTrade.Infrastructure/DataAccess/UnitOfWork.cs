@@ -14,9 +14,10 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			this.genericRepository = genericRepository ?? throw new ArgumentNullException(nameof(genericRepository));
 		}
 
-		public async Task CommitAsync()
+		public async Task<IResponseContainer> CommitAsync()
 		{
-			await genericRepository.ApplyChangesAsync();
+			var result = await genericRepository.ApplyChangesAsync();
+			return result;
 		}
 	}
 }

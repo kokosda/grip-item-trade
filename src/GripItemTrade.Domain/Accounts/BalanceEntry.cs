@@ -3,6 +3,7 @@ using GripItemTrade.Core.Interfaces;
 using GripItemTrade.Domain.Accounts.Specifications;
 using GripItemTrade.Domain.Customers;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GripItemTrade.Domain.Accounts
 {
@@ -26,6 +27,9 @@ namespace GripItemTrade.Domain.Accounts
 				amount = value;
 			}
 		}
+
+		[Timestamp]
+		public byte[] Timestamp { get; set; }
 
 		public IResponseContainer Charge(decimal amount)
 		{

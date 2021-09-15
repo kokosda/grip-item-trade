@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using GripItemTrade.Core.Interfaces;
+using System.Threading.Tasks;
 
 namespace GripItemTrade.Infrastructure.DataAccess.Interfaces
 {
 	public interface IUnitOfWork
 	{
-		Task CommitAsync();
+		Task<IResponseContainer> CommitAsync();
 	}
 }

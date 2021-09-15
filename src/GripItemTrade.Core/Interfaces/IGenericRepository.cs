@@ -9,6 +9,6 @@ namespace GripItemTrade.Core.Interfaces
 		Task<T> GetAsync<T, TId>(TId id) where T : EntityBase<TId>;
 		Task UpdateAsync<T, TId>(T entity) where T : EntityBase<TId>;
 		Task DeleteAsync<T, TId>(TId id) where T : EntityBase<TId>;
-		Task ApplyChangesAsync();
+		Task<IResponseContainer> ApplyChangesAsync();
 	}
 }

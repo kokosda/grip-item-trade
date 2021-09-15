@@ -1,7 +1,9 @@
 ﻿using GripItemTrade.Core.Domain;
 using GripItemTrade.Core.Interfaces;
+using GripItemTrade.Core.ResponseContainers;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GripItemTrade.Infrastructure.DataAccess
@@ -27,7 +29,6 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			return entity;
 		}
 
-		/// <remarks>TODO: optimize for references' eager loading.</remarks>
 		public async Task<T> GetAsync<T, TId>(TId id) where T : EntityBase<TId>
 		{
 			var result = await dataContext.FindAsync<T>(id);
@@ -49,9 +50,26 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			dataContext.Remove(entity);
 		}
 
-		public async Task ApplyChangesAsync()
+		public async Task<IResponseContainer> ApplyChangesAsync()
 		{
-			await dataContext.SaveChangesAsync();
+			var result = new ResponseContainer();
+
+			try
+			{
+				await dataContext.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException ex)
+			{
+				var exceptionEntry = ex.Entries.Single();
+				var databaseEntry = exceptionEntry.GetDatabaseValues();
+
+				if (databaseEntry == null)
+					result.AddErrorMessage($"Unable to save changes. The {exceptionEntry.GetType().Name} was deleted by another user.");
+				else
+					result.AddErrorMessage($"The {exceptionEntry.GetType().Name} you attempted to edit was modified in another transaction. Repeat your request later.");
+			}
+
+			return result;
 		}
 	}
 }

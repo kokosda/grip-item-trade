@@ -67,7 +67,11 @@ namespace GripItemTrade.Application.Accounting
 			if (!result.IsSuccess)
 				return result;
 
-			await unitOfWork.CommitAsync();
+			var commitResponseContainer = await unitOfWork.CommitAsync();
+			result.JoinWith(commitResponseContainer);
+
+			if (!commitResponseContainer.IsSuccess)
+				return result;
 
 			var transferThingsDto = new TransferThingsDto { TransactionalOperation = debitTransactionalOperation.ToTransactionalOperationDto() };
 			result.SetSuccessValue(transferThingsDto);
