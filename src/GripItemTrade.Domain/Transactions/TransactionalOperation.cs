@@ -12,9 +12,16 @@ namespace GripItemTrade.Domain.Transactions
 		public Account Account { get; init; }
 		public decimal Amount { get; init; }
 		public TransactionalOperationType OperationType { get; init; }
+		public TransactionalOperation ParentOperation { get; init; }
 		public List<TransactionalOperationEntry> Entries { get; init; } = new List<TransactionalOperationEntry>();
+		public IReadOnlyList<TransactionalOperation> DependentOperations { get; init; } = new List<TransactionalOperation>();
 
-		public static IResponseContainerWithValue<TransactionalOperation> Create(Account account, TransactionalOperationType operationType,	 ICollection<BalanceEntryTransferItem> transferItems)
+		public static IResponseContainerWithValue<TransactionalOperation> Create(
+			Account account, 
+			TransactionalOperationType operationType,
+			ICollection<BalanceEntryTransferItem> transferItems,
+			TransactionalOperation parentOperation = null
+		)
 		{
 			if (account is null)
 				throw new ArgumentNullException(nameof(account));
@@ -46,7 +53,8 @@ namespace GripItemTrade.Domain.Transactions
 				Account = account,
 				OperationType = operationType,
 				Amount = transferAmount,
-				Entries = operationEntries
+				Entries = operationEntries,
+				ParentOperation = parentOperation
 			};
 
 			result.SetSuccessValue(transactionalOperation);

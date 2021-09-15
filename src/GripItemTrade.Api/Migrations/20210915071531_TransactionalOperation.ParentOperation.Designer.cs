@@ -4,14 +4,16 @@ using GripItemTrade.Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GripItemTrade.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210915071531_TransactionalOperation.ParentOperation")]
+    partial class TransactionalOperationParentOperation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,7 +171,7 @@ namespace GripItemTrade.Api.Migrations
                         .HasForeignKey("AccountId");
 
                     b.HasOne("GripItemTrade.Domain.Transactions.TransactionalOperation", "ParentOperation")
-                        .WithMany("DependentOperations")
+                        .WithMany()
                         .HasForeignKey("ParentOperationId");
 
                     b.Navigation("Account");
@@ -202,8 +204,6 @@ namespace GripItemTrade.Api.Migrations
 
             modelBuilder.Entity("GripItemTrade.Domain.Transactions.TransactionalOperation", b =>
                 {
-                    b.Navigation("DependentOperations");
-
                     b.Navigation("Entries");
                 });
 #pragma warning restore 612, 618

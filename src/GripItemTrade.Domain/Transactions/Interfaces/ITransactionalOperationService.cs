@@ -7,6 +7,6 @@ namespace GripItemTrade.Domain.Transactions.Interfaces
 {
 	public interface ITransactionalOperationService
 	{
-		Task<IResponseContainerWithValue<TransactionalOperation>> SaveOperationsAsync(Account account, TransactionalOperationType operationType, ICollection<BalanceEntryTransferItem> transferItems);
+		Task<IResponseContainerWithValue<TransactionalOperation>> SaveOperationsAsync(Account account, TransactionalOperationType operationType, ICollection<BalanceEntryTransferItem> transferItems, TransactionalOperation parentOperation = null);
 	}
 }

@@ -17,7 +17,12 @@ namespace GripItemTrade.Domain.Transactions
 			this.genericRepository = genericRepository ?? throw new ArgumentNullException(nameof(genericRepository));
 		}
 
-		public async Task<IResponseContainerWithValue<TransactionalOperation>> SaveOperationsAsync(Account account, TransactionalOperationType operationType, ICollection<BalanceEntryTransferItem> transferItems)
+		public async Task<IResponseContainerWithValue<TransactionalOperation>> SaveOperationsAsync(
+			Account account, 
+			TransactionalOperationType operationType, 
+			ICollection<BalanceEntryTransferItem> transferItems, 
+			TransactionalOperation parentOperation = null
+		)
 		{
 			if (account is null)
 				throw new ArgumentNullException(nameof(account));
@@ -25,7 +30,7 @@ namespace GripItemTrade.Domain.Transactions
 				throw new ArgumentNullException(nameof(transferItems));
 
 			var result = new ResponseContainerWithValue<TransactionalOperation>();
-			var createResponseContainer = TransactionalOperation.Create(account, operationType, transferItems);
+			var createResponseContainer = TransactionalOperation.Create(account, operationType, transferItems, parentOperation);
 			result.JoinWith(createResponseContainer);
 
 			if (!createResponseContainer.IsSuccess)

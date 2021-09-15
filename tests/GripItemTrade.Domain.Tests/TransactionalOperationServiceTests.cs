@@ -22,9 +22,9 @@ namespace GripItemTrade.Domain.Tests
 			transactionalOperartionService = new TransactionalOperationService(genericRepositoryMock.Object);
 		}
 
-		[TestCase("Debit", TestName = "Transfers debited amount successfully and returns balance entries.")]
-		[TestCase("Credit", TestName = "Transfers credited amount successfully and returns balance entries.")]
-		public async Task TransferAsync_FullBalanceTransferEntries_SuccessfullyDepositedAndCredited(TransactionalOperationType operationType)
+		[TestCase("Debit", false, TestName = "Transfers debited amount successfully and returns balance entries.")]
+		[TestCase("Credit", true, TestName = "Transfers credited amount successfully and returns balance entries.")]
+		public async Task TransferAsync_FullBalanceTransferEntries_SuccessfullyDepositedAndCredited(TransactionalOperationType operationType, bool isParentIncluded)
 		{
 			// Arrange
 			var account = new Account { Id = 1, Customer = new Customer() };
@@ -39,12 +39,13 @@ namespace GripItemTrade.Domain.Tests
 				new BalanceEntryTransferItem { BalanceEntry = balanceEntries[0], Amount = 2M },
 				new BalanceEntryTransferItem { BalanceEntry = balanceEntries[2], Amount = 1M }
 			};
+			TransactionalOperation parentOperation = isParentIncluded ? new TransactionalOperation() : null;
 
 			genericRepositoryMock.Setup(gr => gr.CreateAsync<TransactionalOperation, int>(It.IsAny<TransactionalOperation>()))
 				.Returns((TransactionalOperation to) => Task.FromResult(to));
 
 			// Act
-			var result = await transactionalOperartionService.SaveOperationsAsync(account, operationType, transferItems);
+			var result = await transactionalOperartionService.SaveOperationsAsync(account, operationType, transferItems, parentOperation);
 
 			// Assert
 			Assert.IsTrue(result.IsSuccess);
@@ -58,6 +59,7 @@ namespace GripItemTrade.Domain.Tests
 			Assert.AreEqual("CAMERA", transactionOperation.Entries[0].BalanceEntry.Code);
 			Assert.AreEqual(1M, transactionOperation.Entries[1].Amount);
 			Assert.AreEqual("BOLT", transactionOperation.Entries[1].BalanceEntry.Code);
+			Assert.AreEqual(parentOperation, transactionOperation.ParentOperation);
 		}
 	}
 }
