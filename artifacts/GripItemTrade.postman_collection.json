@@ -1,0 +1,65 @@
+{
+	"info": {
+		"_postman_id": "b40a44f7-efad-46cb-a8f4-f29471907189",
+		"name": "GripItemTrade",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TransferThings",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"SourceAccountId\": 1,\r\n    \"DestinationAccountId\": 2,\r\n    \"BalanceEntries\": [\r\n        {\r\n            \"BalanceEntryId\": 1,\r\n            \"Amount\": 4\r\n        },\r\n        {\r\n            \"BalanceEntryId\": 1,\r\n            \"Amount\": 7\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/accounts",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionalOperations",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"SourceAccountId\": 1,\r\n    \"DestinationAccountId\": 2,\r\n    \"BalanceEntries\": [\r\n        {\r\n            \"BalanceEntryId\": 2,\r\n            \"Amount\": 4\r\n        },\r\n        {\r\n            \"BalanceEntryId\": 3,\r\n            \"Amount\": 7\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/transactionaloperations/3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"transactionaloperations",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
