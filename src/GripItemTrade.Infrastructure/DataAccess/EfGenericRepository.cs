@@ -11,11 +11,11 @@ namespace GripItemTrade.Infrastructure.DataAccess
 	/// </summary>
 	public class EfGenericRepository: IGenericRepository
 	{
-		private readonly DataContext dbContext;
+		protected readonly DataContext dataContext;
 
 		public EfGenericRepository(DataContext dataContext)
 		{
-			this.dbContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+			this.dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
 		}
 		
 		public async Task<T> CreateAsync<T, TId>(T entity) where T: EntityBase<TId>
@@ -23,14 +23,14 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			if (entity == null)
 				throw new ArgumentNullException(nameof(entity));
 
-			await dbContext.AddAsync(entity);
+			await dataContext.AddAsync(entity);
 			return entity;
 		}
 
 		/// <remarks>TODO: optimize for references' eager loading.</remarks>
 		public async Task<T> GetAsync<T, TId>(TId id) where T : EntityBase<TId>
 		{
-			var result = await dbContext.FindAsync<T>(id);
+			var result = await dataContext.FindAsync<T>(id);
 			return result;
 		}
 
@@ -39,19 +39,19 @@ namespace GripItemTrade.Infrastructure.DataAccess
 			if (entity is null)
 				throw new ArgumentNullException(nameof(entity));
 
-			dbContext.Entry(entity).State = EntityState.Modified;
+			dataContext.Entry(entity).State = EntityState.Modified;
 			return Task.CompletedTask;
 		}
 
 		public async Task DeleteAsync<T, TId>(TId id) where T : EntityBase<TId>
 		{
 			var entity = await GetAsync<T, TId>(id);
-			dbContext.Remove(entity);
+			dataContext.Remove(entity);
 		}
 
 		public async Task ApplyChangesAsync()
 		{
-			await dbContext.SaveChangesAsync();
+			await dataContext.SaveChangesAsync();
 		}
 	}
 }

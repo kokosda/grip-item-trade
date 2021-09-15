@@ -74,7 +74,7 @@ namespace GripItemTrade.Infrastructure.DataAccess
 
 		private void SeedBalanceEntries(DataContext dataContext, ICollection<Account> accounts)
 		{
-			if (dataContext.BalanceEntry.Any())
+			if (dataContext.BalanceEntries.Any())
 				return;
 
 			foreach (var account in accounts)

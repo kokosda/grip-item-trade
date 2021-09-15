@@ -10,7 +10,7 @@ namespace GripItemTrade.Infrastructure.DataAccess
 	{
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Account> Accounts { get; set; }
-		public DbSet<BalanceEntry> BalanceEntry { get; set; }
+		public DbSet<BalanceEntry> BalanceEntries { get; set; }
 		public DbSet<TransactionalOperation> TransactionalOperations { get; set; }
 		public DbSet<TransactionalOperationEntry> TransactionOperationEntries { get; set; }
 
