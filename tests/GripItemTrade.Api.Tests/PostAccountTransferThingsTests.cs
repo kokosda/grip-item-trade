@@ -9,6 +9,12 @@ namespace GripItemTrade.Api.Tests
 	[TestFixture]
 	public class PostAccountTransferThingsTests : ApiBaseTest
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			OnSetUp();
+		}
+
 		[TearDown]
 		public void TearDown()
 		{

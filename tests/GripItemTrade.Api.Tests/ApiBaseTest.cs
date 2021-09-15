@@ -1,19 +1,25 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 using System;
+using System.IO;
 using System.Net.Http;
 
 namespace GripItemTrade.Api.Tests
 {
 	public abstract class ApiBaseTest : IDisposable
 	{
-		protected readonly TestServer server;
+		protected TestServer server;
 
-		public HttpClient Client { get; }
+		public HttpClient Client { get; private set; }
 
-		public ApiBaseTest()
+		public void OnSetUp()
 		{
-			server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile("appsettings.json");
+			server = new TestServer(new WebHostBuilder().UseConfiguration(builder.Build()).UseStartup<Startup>());
 			Client = server.CreateClient();
 		}
 
