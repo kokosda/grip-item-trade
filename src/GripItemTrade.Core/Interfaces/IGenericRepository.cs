@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using GripItemTrade.Core.Domain;
+﻿using GripItemTrade.Core.Domain;
+using System.Threading.Tasks;
 
 namespace GripItemTrade.Core.Interfaces
 {

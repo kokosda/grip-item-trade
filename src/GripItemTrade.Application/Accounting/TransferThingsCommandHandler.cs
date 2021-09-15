@@ -16,14 +16,22 @@ namespace GripItemTrade.Application.Accounting
 	public sealed class TransferThingsCommandHandler : GenericCommandHandlerBase<TransferThingsCommand, TransferThingsDto>
 	{
 		private readonly IUnitOfWork unitOfWork;
-		private readonly IGenericRepository genericRepository;
+		private readonly IAccountRepository accountRepository;
+		private readonly IBalanceEntryRepository balanceEntryRepository;
 		private readonly IAccountService accountService;
 		private readonly ITransactionalOperationService transactionalOperationService;
 
-		public TransferThingsCommandHandler(IUnitOfWork unitOfWork, IGenericRepository genericRepository, IAccountService accountService, ITransactionalOperationService transactionalOperationService)
+		public TransferThingsCommandHandler(
+			IUnitOfWork unitOfWork,
+			IAccountRepository accountRepository,
+			IBalanceEntryRepository balanceEntryRepository,
+			IAccountService accountService, 
+			ITransactionalOperationService transactionalOperationService
+		)
 		{
 			this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-			this.genericRepository = genericRepository ?? throw new ArgumentNullException(nameof(genericRepository));
+			this.accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+			this.balanceEntryRepository = balanceEntryRepository ?? throw new ArgumentNullException(nameof(balanceEntryRepository));
 			this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
 			this.transactionalOperationService = transactionalOperationService ?? throw new ArgumentNullException(nameof(transactionalOperationService));
 		}
@@ -46,18 +54,23 @@ namespace GripItemTrade.Application.Accounting
 				return result;
 
 			var balanceTransferResult = transferResponseContainer.Value;
-			var debitTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(sourceAccount, TransactionalOperationType.Debit, balanceTransferResult.ChargedItems);
-			var creditTransactionalOperation = await transactionalOperationService.SaveOperationsAsync(destinationAccount, TransactionalOperationType.Credit, balanceTransferResult.DepositedItems);
+			var debitResponse = await transactionalOperationService.SaveOperationsAsync(sourceAccount, TransactionalOperationType.Debit, balanceTransferResult.ChargedItems);
+			result.JoinWith(debitResponse);
 
-			result.JoinWith(debitTransactionalOperation).JoinWith(creditTransactionalOperation);
+			if (!result.IsSuccess)
+				return result;
 
-			if (result.IsSuccess)
-			{
-				await unitOfWork.CommitAsync();
+			var debitTransactionalOperation = debitResponse.Value;
+			var creditResponse = await transactionalOperationService.SaveOperationsAsync(destinationAccount, TransactionalOperationType.Credit, balanceTransferResult.DepositedItems, debitTransactionalOperation);
+			result.JoinWith(creditResponse);
 
-				var transferThingsDto = new [] { debitTransactionalOperation.Value, creditTransactionalOperation.Value }.ToTransferThingsDto();
-				result.SetSuccessValue(transferThingsDto);
-			}
+			if (!result.IsSuccess)
+				return result;
+
+			await unitOfWork.CommitAsync();
+
+			var transferThingsDto = new TransferThingsDto { TransactionalOperation = debitTransactionalOperation.ToTransactionalOperationDto() };
+			result.SetSuccessValue(transferThingsDto);
 
 			return result;
 		}
@@ -65,7 +78,7 @@ namespace GripItemTrade.Application.Accounting
 		private async Task<IResponseContainerWithValue<Tuple<Account, Account, List<BalanceEntryTransferItem>>>> ValidateCommandAsync(TransferThingsCommand command)
 		{
 			var result = new ResponseContainerWithValue<Tuple<Account, Account, List<BalanceEntryTransferItem>>>();
-			var sourceAccount = await genericRepository.GetAsync<Account, int>(command.SourceAccountId);
+			var sourceAccount = await accountRepository.GetByIdAsync(command.SourceAccountId);
 
 			if (sourceAccount is null)
 			{
@@ -73,7 +86,7 @@ namespace GripItemTrade.Application.Accounting
 				return result;
 			}
 
-			var destinationAccount = await genericRepository.GetAsync<Account, int>(command.DestinationAccountId);
+			var destinationAccount = await accountRepository.GetByIdAsync(command.DestinationAccountId);
 
 			if (destinationAccount is null)
 			{
@@ -85,7 +98,7 @@ namespace GripItemTrade.Application.Accounting
 
 			foreach (var balanceEntryDto in command.BalanceEntries)
 			{
-				var balanceEntry = await genericRepository.GetAsync<BalanceEntry, int>(balanceEntryDto.BalanceEntryId);
+				var balanceEntry = await balanceEntryRepository.GetByIdAsync(balanceEntryDto.BalanceEntryId);
 
 				if (balanceEntry is null)
 				{

@@ -8,6 +8,8 @@ using GripItemTrade.Domain.Accounts;
 using GripItemTrade.Domain.Accounts.Interfaces;
 using GripItemTrade.Domain.Transactions.Interfaces;
 using GripItemTrade.Domain.Transactions;
+using GripItemTrade.Infrastructure.DataAccess.Accounting;
+using GripItemTrade.Infrastructure.DataAccess.Transactions;
 
 namespace GripItemTrade.Infrastructure.DependencyInjection
 {
@@ -31,6 +33,9 @@ namespace GripItemTrade.Infrastructure.DependencyInjection
 		{
 			serviceCollection.AddScoped<IAccountService, AccountService>();
 			serviceCollection.AddScoped<ITransactionalOperationService, TransactionalOperationService>();
+			serviceCollection.AddScoped<IAccountRepository, AccountRepository>();
+			serviceCollection.AddScoped<IBalanceEntryRepository, BalanceEntryRepository>();
+			serviceCollection.AddScoped<ITransactionalOperationRepository, TransactionalOperationRepository>();
 		}
 	}
 }
