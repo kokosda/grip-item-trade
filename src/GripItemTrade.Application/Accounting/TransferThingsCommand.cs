@@ -4,6 +4,7 @@ namespace GripItemTrade.Application.Accounting
 {
 	public sealed class TransferThingsCommand
 	{
+		[Required]
 		public BalanceEntryDto[] BalanceEntries { get; set; }
 
 		[Range(1, int.MaxValue)]
