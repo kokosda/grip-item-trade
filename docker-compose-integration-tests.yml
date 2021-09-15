@@ -20,4 +20,10 @@ services:
     build:
       context: .
       dockerfile: tests/GripItemTrade.Infrastructure.Tests/Dockerfile
-    
+  gripitemtrade.api.tests:
+    image: ${DOCKER_REGISTRY-}gripitemtradeapi
+    depends_on: 
+      - gripitemtrade.api
+    build:
+      context: .
+      dockerfile: tests/GripItemTrade.Api.Tests/Dockerfile
