@@ -38,3 +38,4 @@ Debit transactional operation is parent one. Credit is considered to be a depend
 - Unit-tests are containerized but they need to be added to the pipeline.
 - To actually run unit-tests, the connection string host needs to be replaced with `localhost`. They should be able to run in container as well as within Visual Studio.
 - Secrets needs to be protected with Azure KeyVault.
+- Authentication and authorization.
