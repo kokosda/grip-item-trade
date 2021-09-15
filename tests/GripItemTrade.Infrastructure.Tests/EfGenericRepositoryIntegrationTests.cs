@@ -1,9 +1,7 @@
-using GripItemTrade.Core.Interfaces;
 using GripItemTrade.Domain.Accounts;
 using GripItemTrade.Domain.Customers;
 using GripItemTrade.Infrastructure.DataAccess;
 using NUnit.Framework;
-using System;
 using System.Threading.Tasks;
 
 namespace GripItemTrade.Infrastructure.Tests
